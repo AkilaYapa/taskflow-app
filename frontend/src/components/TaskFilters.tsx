@@ -7,9 +7,17 @@ import type {
 type TaskFiltersProps = {
   filters: TaskFilter;
   onFilterChange: (filters: TaskFilter) => void;
+  onResetFilters: () => void;
 };
 
-function TaskFilters({ filters, onFilterChange }: TaskFiltersProps) {
+function TaskFilters({
+  filters,
+  onFilterChange,
+  onResetFilters,
+}: TaskFiltersProps) {
+  const hasActiveFilters =
+    filters.status !== "All" || filters.priority !== "All";
+
   return (
     <section className="filters">
       <label>
@@ -47,6 +55,15 @@ function TaskFilters({ filters, onFilterChange }: TaskFiltersProps) {
           <option value="High">High</option>
         </select>
       </label>
+
+      <button
+        type="button"
+        className="reset-filters-button"
+        onClick={onResetFilters}
+        disabled={!hasActiveFilters}
+      >
+        Reset Filters
+      </button>
     </section>
   );
 }

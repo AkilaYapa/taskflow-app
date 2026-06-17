@@ -7,6 +7,13 @@ import type {
   UpdateTaskRequest,
 } from "../types/TaskItem";
 
+type FormErrors = {
+  title?: string;
+  description?: string;
+};
+
+const DESCRIPTION_MAX_LENGTH = 250;
+
 type TaskFormProps = {
   editingTask: TaskItem | null;
   onCreateTask: (task: CreateTaskRequest) => Promise<void>;
@@ -25,6 +32,7 @@ function TaskForm({
   const [status, setStatus] = useState<TaskStatus>("Pending");
   const [priority, setPriority] = useState<TaskPriority>("Medium");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const isEditMode = editingTask !== null;
 
@@ -41,28 +49,49 @@ function TaskForm({
     setDescription("");
     setStatus("Pending");
     setPriority("Medium");
+    setErrors({});
   }, [editingTask]);
+
+  const validateForm = () => {
+    const nextErrors: FormErrors = {};
+
+    if (!title.trim()) {
+      nextErrors.title = "Task title is required.";
+    }
+
+    if (!description.trim()) {
+      nextErrors.description = "Task description is required.";
+    } else if (description.trim().length > DESCRIPTION_MAX_LENGTH) {
+      nextErrors.description = `Task description must be ${DESCRIPTION_MAX_LENGTH} characters or less.`;
+    }
+
+    setErrors(nextErrors);
+
+    return Object.keys(nextErrors).length === 0;
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!title.trim()) {
+    if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
+    const taskTitle = title.trim();
+    const taskDescription = description.trim();
 
     if (editingTask) {
       await onUpdateTask(editingTask.id, {
-        title,
-        description,
+        title: taskTitle,
+        description: taskDescription,
         status,
         priority,
       });
     } else {
       await onCreateTask({
-        title,
-        description,
+        title: taskTitle,
+        description: taskDescription,
         status: "Pending",
         priority,
       });
@@ -72,6 +101,7 @@ function TaskForm({
     setDescription("");
     setStatus("Pending");
     setPriority("Medium");
+    setErrors({});
     setIsSubmitting(false);
   };
 
@@ -85,17 +115,38 @@ function TaskForm({
           type="text"
           placeholder="Enter task title"
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={(event) => {
+            setTitle(event.target.value);
+            setErrors((currentErrors) => ({
+              ...currentErrors,
+              title: undefined,
+            }));
+          }}
         />
+        {errors.title && <span className="field-error">{errors.title}</span>}
       </label>
 
       <label>
         Description
         <textarea
           placeholder="Enter task description"
+          rows={5}
+          maxLength={DESCRIPTION_MAX_LENGTH}
           value={description}
-          onChange={(event) => setDescription(event.target.value)}
+          onChange={(event) => {
+            setDescription(event.target.value);
+            setErrors((currentErrors) => ({
+              ...currentErrors,
+              description: undefined,
+            }));
+          }}
         />
+        {errors.description && (
+          <span className="field-error">{errors.description}</span>
+        )}
+        <span className="character-count">
+          {description.length}/{DESCRIPTION_MAX_LENGTH} characters
+        </span>
       </label>
 
       {isEditMode && (

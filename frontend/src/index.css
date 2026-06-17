@@ -86,7 +86,18 @@ button {
 }
 
 .task-form textarea {
-  min-height: 80px;
+  resize: none;
+}
+
+.field-error {
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.character-count {
+  color: #64748b;
+  font-size: 14px;
+  text-align: right;
 }
 
 .form-actions {
@@ -102,7 +113,20 @@ button {
 .filters {
   display: flex;
   gap: 16px;
+  align-items: end;
   margin-bottom: 24px;
+}
+
+.reset-filters-button {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.reset-filters-button:disabled {
+  color: #94a3b8;
+  cursor: not-allowed;
 }
 
 .task-list {
@@ -119,6 +143,12 @@ button {
 
 .task-card-header h3 {
   margin: 0;
+}
+
+.task-date {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 0;
 }
 
 .task-card-footer {
@@ -172,6 +202,23 @@ button {
 .error-message {
   color: #dc2626;
   font-weight: bold;
+}
+
+.empty-state {
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: #64748b;
 }
 
 @media (max-width: 768px) {

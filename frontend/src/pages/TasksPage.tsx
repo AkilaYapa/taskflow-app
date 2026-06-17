@@ -18,11 +18,13 @@ import type {
 } from "../types/TaskItem";
 
 function TasksPage() {
-  const [tasks, setTasks] = useState<TaskItem[]>([]);
-  const [filters, setFilters] = useState<TaskFilter>({
+  const defaultFilters: TaskFilter = {
     status: "All",
     priority: "All",
-  });
+  };
+
+  const [tasks, setTasks] = useState<TaskItem[]>([]);
+  const [filters, setFilters] = useState<TaskFilter>(defaultFilters);
   const [editingTask, setEditingTask] = useState<TaskItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -111,6 +113,10 @@ function TasksPage() {
     }
   };
 
+  const handleResetFilters = () => {
+    setFilters(defaultFilters);
+  };
+
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
       const matchesStatus =
@@ -143,7 +149,11 @@ function TasksPage() {
         onCancelEdit={handleCancelEdit}
       />
 
-      <TaskFilters filters={filters} onFilterChange={setFilters} />
+      <TaskFilters
+        filters={filters}
+        onFilterChange={setFilters}
+        onResetFilters={handleResetFilters}
+      />
 
       {errorMessage && <p className="error-message">{errorMessage}</p>}
 
@@ -153,8 +163,16 @@ function TasksPage() {
         <section>
           <h2>Tasks</h2>
 
-          {filteredTasks.length === 0 ? (
-            <p>No tasks found.</p>
+          {tasks.length === 0 ? (
+            <div className="empty-state">
+              <h3>No tasks yet</h3>
+              <p>Create your first task using the form above.</p>
+            </div>
+          ) : filteredTasks.length === 0 ? (
+            <div className="empty-state">
+              <h3>No matching tasks</h3>
+              <p>Try changing the status or priority filters.</p>
+            </div>
           ) : (
             <div className="task-list">
               {filteredTasks.map((task) => (

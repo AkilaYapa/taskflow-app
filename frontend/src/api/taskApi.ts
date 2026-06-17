@@ -3,6 +3,7 @@ import type {
   TaskItem,
   UpdateTaskRequest,
 } from "../types/TaskItem";
+import { USE_MOCK_API } from "./apiConfig";
 
 const STORAGE_KEY = "taskflow_tasks";
 
@@ -45,6 +46,10 @@ function saveTasks(tasks: TaskItem[]) {
 }
 
 export async function getTasks(): Promise<TaskItem[]> {
+  if (!USE_MOCK_API) {
+    throw new Error("Backend API is not connected yet.");
+  }
+
   await delay();
   return readTasks();
 }
@@ -52,6 +57,10 @@ export async function getTasks(): Promise<TaskItem[]> {
 export async function createTask(
   request: CreateTaskRequest
 ): Promise<TaskItem> {
+  if (!USE_MOCK_API) {
+    throw new Error("Backend API is not connected yet.");
+  }
+
   await delay();
 
   const tasks = readTasks();
@@ -75,6 +84,10 @@ export async function updateTask(
   id: number,
   request: UpdateTaskRequest
 ): Promise<TaskItem> {
+  if (!USE_MOCK_API) {
+    throw new Error("Backend API is not connected yet.");
+  }
+
   await delay();
 
   const tasks = readTasks();
@@ -100,6 +113,10 @@ export async function updateTask(
 }
 
 export async function deleteTask(id: number): Promise<void> {
+  if (!USE_MOCK_API) {
+    throw new Error("Backend API is not connected yet.");
+  }
+
   await delay();
 
   const tasks = readTasks();

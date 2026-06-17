@@ -16,6 +16,12 @@ function TaskCard({
   onStatusChange,
   onDelete,
 }: TaskCardProps) {
+  const createdDate = new Intl.DateTimeFormat("en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(new Date(task.createdAt));
+
   return (
     <article className="task-card">
       <div className="task-card-header">
@@ -26,6 +32,7 @@ function TaskCard({
       </div>
 
       <p>{task.description || "No description provided."}</p>
+      <p className="task-date">Created {createdDate}</p>
 
       <div className="task-card-footer">
         <label>

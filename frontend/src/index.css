@@ -1,0 +1,169 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f8;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin-bottom: 4px;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dashboard-card,
+.task-form,
+.task-card,
+.filters {
+  background: #ffffff;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.dashboard-card h3 {
+  margin: 0 0 8px;
+}
+
+.dashboard-card p {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.task-form {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.task-form label,
+.filters label,
+.task-card-footer label {
+  display: grid;
+  gap: 6px;
+}
+
+.task-form input,
+.task-form textarea,
+.task-form select,
+.filters select,
+.task-card-footer select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.task-form textarea {
+  min-height: 80px;
+}
+
+.task-form button {
+  width: fit-content;
+  padding: 8px 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.task-list {
+  display: grid;
+  gap: 16px;
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.task-card-header h3 {
+  margin: 0;
+}
+
+.task-card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+  margin-top: 16px;
+}
+
+.priority {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 14px;
+  background: #e5e7eb;
+}
+
+.priority-low {
+  background: #dcfce7;
+}
+
+.priority-medium {
+  background: #fef9c3;
+}
+
+.priority-high {
+  background: #fee2e2;
+}
+
+.delete-button {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.error-message {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filters,
+  .task-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

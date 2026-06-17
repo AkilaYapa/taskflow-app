@@ -14,6 +14,7 @@ import type {
   TaskFilter,
   TaskItem,
   TaskStatus,
+  UpdateTaskRequest,
 } from "../types/TaskItem";
 
 function TasksPage() {
@@ -22,6 +23,7 @@ function TasksPage() {
     status: "All",
     priority: "All",
   });
+  const [editingTask, setEditingTask] = useState<TaskItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -57,6 +59,37 @@ function TasksPage() {
           task.id === id ? updatedTask : task
         )
       );
+
+      setEditingTask((currentTask) =>
+        currentTask?.id === id ? updatedTask : currentTask
+      );
+    } catch {
+      setErrorMessage("Failed to update task.");
+    }
+  };
+
+  const handleEditTask = (task: TaskItem) => {
+    setEditingTask(task);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTask(null);
+  };
+
+  const handleUpdateTask = async (
+    id: number,
+    request: UpdateTaskRequest
+  ) => {
+    try {
+      const updatedTask = await updateTask(id, request);
+
+      setTasks((currentTasks) =>
+        currentTasks.map((task) =>
+          task.id === id ? updatedTask : task
+        )
+      );
+
+      setEditingTask(null);
     } catch {
       setErrorMessage("Failed to update task.");
     }
@@ -68,6 +101,10 @@ function TasksPage() {
 
       setTasks((currentTasks) =>
         currentTasks.filter((task) => task.id !== id)
+      );
+
+      setEditingTask((currentTask) =>
+        currentTask?.id === id ? null : currentTask
       );
     } catch {
       setErrorMessage("Failed to delete task.");
@@ -99,7 +136,12 @@ function TasksPage() {
 
       <DashboardSummary tasks={tasks} />
 
-      <TaskForm onCreateTask={handleCreateTask} />
+      <TaskForm
+        editingTask={editingTask}
+        onCreateTask={handleCreateTask}
+        onUpdateTask={handleUpdateTask}
+        onCancelEdit={handleCancelEdit}
+      />
 
       <TaskFilters filters={filters} onFilterChange={setFilters} />
 
@@ -119,6 +161,7 @@ function TasksPage() {
                 <TaskCard
                   key={task.id}
                   task={task}
+                  onEdit={handleEditTask}
                   onStatusChange={handleStatusChange}
                   onDelete={handleDeleteTask}
                 />

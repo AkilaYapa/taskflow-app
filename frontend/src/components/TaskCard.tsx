@@ -5,11 +5,17 @@ import type {
 
 type TaskCardProps = {
   task: TaskItem;
+  onEdit: (task: TaskItem) => void;
   onStatusChange: (id: number, status: TaskStatus) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 };
 
-function TaskCard({ task, onStatusChange, onDelete }: TaskCardProps) {
+function TaskCard({
+  task,
+  onEdit,
+  onStatusChange,
+  onDelete,
+}: TaskCardProps) {
   return (
     <article className="task-card">
       <div className="task-card-header">
@@ -36,9 +42,15 @@ function TaskCard({ task, onStatusChange, onDelete }: TaskCardProps) {
           </select>
         </label>
 
-        <button className="delete-button" onClick={() => onDelete(task.id)}>
-          Delete
-        </button>
+        <div className="task-card-actions">
+          <button className="edit-button" onClick={() => onEdit(task)}>
+            Edit
+          </button>
+
+          <button className="delete-button" onClick={() => onDelete(task.id)}>
+            Delete
+          </button>
+        </div>
       </div>
     </article>
   );
